@@ -35,6 +35,8 @@ public class SelfSignedSslEngineSource implements SslEngineSource {
     private static final String ALIAS = "littleproxy";
     private static final String PASSWORD = "Be Your Own Lantern";
     private static final String PROTOCOL = "TLS";
+    private static final X509Certificate[] NO_ISSUERS = {};
+
     private final File keyStoreFile;
     private final boolean trustAllServers;
     private final boolean sendCerts;
@@ -114,7 +116,7 @@ public class SelfSignedSslEngineSource implements SslEngineSource {
                     .getInstance(algorithm);
             tmf.init(ks);
 
-            TrustManager[] trustManagers = null;
+            TrustManager[] trustManagers;
             if (!trustAllServers) {
                 trustManagers = tmf.getTrustManagers();
             } else {
@@ -134,7 +136,7 @@ public class SelfSignedSslEngineSource implements SslEngineSource {
 
                     @Override
                     public X509Certificate[] getAcceptedIssuers() {
-                        return null;
+                        return NO_ISSUERS;
                     }
                 } };
             }
